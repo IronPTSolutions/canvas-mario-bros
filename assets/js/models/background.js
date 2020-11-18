@@ -16,10 +16,23 @@ class Background {
     this.img.onload = () => {
       this.img.isReady = true;
     }
+
+    this.movements = {
+      right: false
+    }
   }
 
   isReady() {
     return this.img.isReady;
+  }
+
+  onKeyEvent(event) {
+    const status = event.type === 'keydown';
+    switch (event.keyCode) {
+      case KEY_RIGHT:
+        this.movements.right = status;
+        break;
+    }
   }
 
   draw() {
@@ -43,9 +56,11 @@ class Background {
   }
 
   move() {
-    this.x += this.vx;
-    if (this.x + this.w <= 0) {
-      this.x = 0;
+    if (this.movements.right) {
+      this.x += this.vx;
+      if (this.x + this.w <= 0) {
+        this.x = 0;
+      }
     }
   }
 }

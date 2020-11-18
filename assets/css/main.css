@@ -8,3 +8,7 @@ html, body {
 body * {
   box-sizing: border-box;
 }
+
+canvas {
+  overflow: hidden;
+}
