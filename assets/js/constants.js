@@ -4,3 +4,4 @@ const KEY_DOWN = 40;
 const KEY_LEFT = 37;
 
 const MOVEMENT_FRAMES = 10;
+const GRAVITY = 0.4;
