@@ -36,6 +36,9 @@ class Mario {
       left: false
     }
     this.isJumping = false;
+
+    this.canFire = true;
+    this.bullets = [];
   }
 
   isReady() {
@@ -57,7 +60,20 @@ class Mario {
       case KEY_LEFT:
         this.movements.left = status;
         break;
+      case KEY_FIRE:
+        if (this.canFire) {
+          this.animateJump();
+          this.bullets.push(new Fireball(this.ctx, this.x + this.width, this.y + 10, this.maxY + this.height))
+          this.canFire = false;
+          setTimeout(() => this.canFire = true, 500);
+        }
+        
+        break;
     }
+  }
+
+  clear() {
+    this.bullets = this.bullets.filter(bullet => bullet.x <= this.ctx.canvas.width)
   }
 
   draw() {
@@ -73,12 +89,15 @@ class Mario {
         this.width,
         this.height
       );
+      this.bullets.forEach(bullet => bullet.draw());
       this.sprite.drawCount++;
       this.animate();
     }
   }
 
   move() {
+    this.bullets.forEach(bullet => bullet.move());
+
     if (this.movements.up && !this.isJumping) {
       this.isJumping = true;
       this.vy = -8;
@@ -87,9 +106,9 @@ class Mario {
     }
     
     if (this.movements.right) {
-      this.vx = 4;
+      this.vx = SPEED;
     } else if (this.movements.left) {
-      this.vx = -4;
+      this.vx = -SPEED;
     } else {
       this.vx = 0;
     }
