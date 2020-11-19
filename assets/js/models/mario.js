@@ -154,7 +154,7 @@ class Mario {
       this.sprite.verticalFrameIndex = initialVerticalIndex;
       this.sprite.horizontalFrameIndex = initialHorizontalIndex;
     } else if (this.sprite.drawCount % frequency === 0) {
-      this.sprite.horizontalFrameIndex = this.sprite.horizontalFrameIndex >= maxHorizontalSegments ? 0 : this.sprite.horizontalFrameIndex + 1;
+      this.sprite.horizontalFrameIndex = (this.sprite.horizontalFrameIndex + 1) % this.sprite.horizontalFrames;
       this.sprite.drawCount = 0;
     }
   }

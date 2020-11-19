@@ -11,6 +11,7 @@ class Game {
 
     this.background = new Background(this.ctx);
     this.mario = new Mario(this.ctx, 20, this.canvas.height - 97);
+    this.coins = [new Coin(this.ctx, this.mario.x + 100, this.mario.y)];
   }
 
   start() {
@@ -36,6 +37,7 @@ class Game {
   draw() {
     this.background.draw();
     this.mario.draw();
+    this.coins.forEach(coin => coin.draw());
   }
 
   move() {
