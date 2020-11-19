@@ -11,7 +11,14 @@ class Game {
 
     this.background = new Background(this.ctx);
     this.mario = new Mario(this.ctx, 20, this.canvas.height - 97);
-    this.coins = [new Coin(this.ctx, this.mario.x + 100, this.mario.y)];
+    this.coins = [
+      new Coin(this.ctx, this.mario.x + 100, this.mario.y),
+      new Coin(this.ctx, this.mario.x + 200, this.mario.y),
+      new Coin(this.ctx, this.mario.x + 300, this.mario.y)
+    ];
+    
+    this.pointsCoin = new Coin(this.ctx, 10, 10)
+    this.points = 0;
   }
 
   start() {
@@ -20,6 +27,7 @@ class Game {
         this.clear();
         this.move();
         this.draw();
+        this.checkCollisions();
       }, this.fps)
     }
   }
@@ -38,6 +46,12 @@ class Game {
     this.background.draw();
     this.mario.draw();
     this.coins.forEach(coin => coin.draw());
+
+    this.pointsCoin.draw();
+    this.ctx.save();
+    this.ctx.font = "17px Arial";
+    this.ctx.fillText(this.points, 30, 25);
+    this.ctx.restore();
   }
 
   move() {
@@ -45,6 +59,12 @@ class Game {
       this.background.move();
     }
     this.mario.move();
+  }
+
+  checkCollisions() {
+    const restOfCoins = this.coins.filter(coin => !this.mario.collidesWith(coin));
+    this.points += this.coins.length - restOfCoins.length;
+    this.coins = restOfCoins;
   }
 
 }
