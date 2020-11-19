@@ -39,6 +39,10 @@ class Mario {
 
     this.canFire = true;
     this.bullets = [];
+
+    this.sounds = {
+      fire: new Audio('./assets/sound/fireball.wav')
+    }
   }
 
   isReady() {
@@ -63,7 +67,9 @@ class Mario {
       case KEY_FIRE:
         if (this.canFire) {
           this.animateJump();
-          this.bullets.push(new Fireball(this.ctx, this.x + this.width, this.y + 10, this.maxY + this.height))
+          this.bullets.push(new Fireball(this.ctx, this.x + this.width, this.y + 10, this.maxY + this.height));
+          this.sounds.fire.currentTime = 0;
+          this.sounds.fire.play();
           this.canFire = false;
           setTimeout(() => this.canFire = true, 500);
         }

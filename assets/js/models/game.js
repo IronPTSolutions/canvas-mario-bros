@@ -14,15 +14,24 @@ class Game {
     this.coins = [
       new Coin(this.ctx, this.mario.x + 100, this.mario.y),
       new Coin(this.ctx, this.mario.x + 200, this.mario.y),
-      new Coin(this.ctx, this.mario.x + 300, this.mario.y)
+      new Coin(this.ctx, this.mario.x + 300, this.mario.y),
+      new Coin(this.ctx, this.mario.x + 700, this.mario.y)
     ];
     
     this.pointsCoin = new Coin(this.ctx, 10, 10)
     this.points = 0;
+
+    const themeAudio = new Audio('./assets/sound/mw-theme.mp3');
+    themeAudio.volume = 0.2;
+    this.sounds = {
+      theme: themeAudio,
+      coin: new Audio('./assets/sound/coin.wav')
+    }
   }
 
   start() {
     if (!this.drawIntervalId) {
+      this.sounds.theme.play();
       this.drawIntervalId = setInterval(() => {
         this.clear();
         this.move();
@@ -35,6 +44,7 @@ class Game {
   onKeyEvent(event) {
     this.mario.onKeyEvent(event);
     this.background.onKeyEvent(event);
+    this.coins.forEach(coin => coin.onKeyEvent(event))
   }
 
   clear() {
@@ -57,13 +67,20 @@ class Game {
   move() {
     if (this.mario.x >= this.mario.maxX) {
       this.background.move();
+      this.coins.forEach(coin => coin.move());
     }
     this.mario.move();
   }
 
   checkCollisions() {
     const restOfCoins = this.coins.filter(coin => !this.mario.collidesWith(coin));
-    this.points += this.coins.length - restOfCoins.length;
+    const newPoints = this.coins.length - restOfCoins.length;
+    this.points += newPoints;
+    Array(newPoints).fill().forEach(() => {
+      this.sounds.coin.currentTime = 0;
+      this.sounds.coin.play()
+    })
+
     this.coins = restOfCoins;
   }
 

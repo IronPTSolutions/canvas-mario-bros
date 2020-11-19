@@ -20,8 +20,22 @@ class Coin {
       this.height = this.sprite.frameHeight;
     }
 
+    this.movements = {
+      right: false
+    }
+
     this.drawCount = 0;
   }
+
+
+  onKeyEvent(event) {
+    const state = event.type === 'keydown';
+    switch (event.keyCode) {
+      case KEY_RIGHT:
+        this.movements.right = state;
+        break;
+    }
+  } 
 
   draw() {
     if (this.sprite.isReady) {
@@ -45,6 +59,12 @@ class Coin {
     if (this.drawCount % MOVEMENT_FRAMES === 0) {
       this.sprite.horizontalFrameIndex = (this.sprite.horizontalFrameIndex + 1) % this.sprite.horizontalFrames;
       this.drawCount = 0;
+    }
+  }
+
+  move() {
+    if (this.movements.right) {
+      this.x -= SPEED;
     }
   }
 }
